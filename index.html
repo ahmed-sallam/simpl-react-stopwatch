@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <style>
+        button{
+            padding: 0.5rem 1rem;
+            border: 0.05rem solid blue;
+            border-radius: 25px;
+            margin: 1rem;
+            background-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const rootElement= document.getElementById('root');
+        
+        class StopWatch extends React.Component{
+            constructor(props){
+                super(props);
+                this.state={
+                    timer:0,
+                    running: false,
+                    time:''
+                }
+            }
+            handelOnClick =()=>{
+                const timeNow=Date.now()-this.state.timer;
+                if(this.state.running){
+                    this.setState({running:false});
+                    clearInterval(this.state.time);
+                } else{
+                    this.setState({running:true});
+                    this.setState({time:setInterval(()=>this.setState({timer:Date.now()-timeNow}),1 )}) ;
+                }
+            }
+            handelClear = ()=>{
+                clearInterval(this.state.time);
+                this.setState({timer:0});
+                this.setState({running:false});
+            }
+            render(){
+                return(
+                    <div>
+                        <h1 style={{padding: '1rem'}}>{`${this.state.timer}ms`}</h1>
+                        <button onClick={this.handelOnClick}>{this.state.running?'Stop':'Start'}</button>
+                        <button onClick={this.handelClear}>Clear</button>
+                    </div>
+                )
+            }
+        }
+
+        const App=()=>{
+           return(
+            <StopWatch/>
+           )
+        }
+        ReactDOM.render(<App/>, rootElement)
+    </script>
+    <script src="https://unpkg.com/react@16.0.0/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</body>
+</html>
